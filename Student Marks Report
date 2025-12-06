@@ -1,0 +1,78 @@
+using System;
+
+class StudentMarksReport
+{
+    static void Main()
+    {
+        Console.WriteLine("===== STUDENT MARKS REPORT GENERATOR =====");
+        Console.Write("Enter number of students: ");
+        int n = int.Parse(Console.ReadLine());
+        int[] marks = new int[n];
+        int[] backupMarks = new int[n];
+        Console.WriteLine("\nEnter marks of each student:");
+        for (int i = 0; i < n; i++)
+        {
+            Console.Write($"Student {i + 1}: ");
+            marks[i] = int.Parse(Console.ReadLine());
+        }
+        Array.Copy(marks, backupMarks, n);
+        Console.WriteLine("\n--- Original Marks ---");
+        for (int i = 0; i < n; i++)
+        {
+            Console.WriteLine($"Student {i + 1}: {marks[i]}");
+        }
+        int[] sortedMarks = new int[n];
+        Array.Copy(marks, sortedMarks, n);
+        Array.Sort(sortedMarks);
+        Console.WriteLine("\n--- Sorted Marks (Ascending) ---");
+        foreach (int m in sortedMarks)
+        {
+            Console.WriteLine(m);
+        }
+        int total = 0;
+        int highest = int.MinValue;
+        int lowest = int.MaxValue;
+        for (int i = 0; i < n; i++)
+        {
+            total += marks[i];
+            if (marks[i] > highest)
+                highest = marks[i];
+            if (marks[i] < lowest)
+                lowest = marks[i];
+        }
+        Console.WriteLine("\n--- Summary ---");
+        Console.WriteLine($"Total Marks: {total}");
+        Console.WriteLine($"Highest Mark: {highest}");
+        Console.WriteLine($"Lowest Mark: {lowest}");
+        Console.Write("\nEnter a mark to search for: ");
+        int searchMark = int.Parse(Console.ReadLine());
+        bool found = Array.Exists(marks, m => m == searchMark);
+        Console.WriteLine("\n--- Search Result ---");
+        if (found)
+            Console.WriteLine($"Mark {searchMark} FOUND in the list.");
+        else
+            Console.WriteLine($"Mark {searchMark} NOT FOUND in the list."); 
+        Console.WriteLine("\nEnter another set of marks to compare:");
+        int[] userMarks = new int[n];
+        for (int i = 0; i < n; i++)
+        {
+            Console.Write($"Student {i + 1}: ");
+            userMarks[i] = int.Parse(Console.ReadLine());
+        }
+        bool identical = true;
+        for (int i = 0; i < n; i++)
+        {
+            if (userMarks[i] != marks[i])
+            {
+                identical = false;
+                break;
+            }
+        }
+        Console.WriteLine("\n--- Comparison Result ---");
+        if (identical)
+            Console.WriteLine("Both sets of marks are IDENTICAL.");
+        else
+            Console.WriteLine("The two sets of marks are NOT IDENTICAL.");
+        Console.WriteLine("\n===== END OF PROGRAM =====");
+    }
+}
