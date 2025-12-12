@@ -1,0 +1,90 @@
+using System;
+
+namespace CompanyApp
+{
+    public class Employee
+    {
+        public string EmployeeName { get; set; }
+        public decimal BasicSalary { get; set; }
+        public decimal HRA { get; private set; }
+        public decimal DA { get; private set; }
+        public decimal GrossPay { get; private set; }
+        public decimal Tax { get; private set; }
+        public decimal NetSalary { get; private set; }
+        public Employee(string name, decimal basicSalary)
+        {
+            EmployeeName = name;
+            BasicSalary = basicSalary;
+        }
+         public void CalculateNetPay()
+        {
+            HRA = BasicSalary * 0.15m;
+            DA = BasicSalary * 0.10m;
+            GrossPay = BasicSalary + HRA + DA;
+            Tax = GrossPay * 0.08m;
+            NetSalary = GrossPay - Tax;
+        }
+        public void Display()
+        {
+            Console.WriteLine($"Employee Name: {EmployeeName}");
+            Console.WriteLine($"Basic Salary: {BasicSalary:C}");
+            Console.WriteLine($"HRA: {HRA:C}");
+            Console.WriteLine($"DA: {DA:C}");
+            Console.WriteLine($"Gross Pay: {GrossPay:C}");
+            Console.WriteLine($"Tax: {Tax:C}");
+            Console.WriteLine($"Net Salary: {NetSalary:C}");
+            Console.WriteLine();
+        }
+    }
+     public class Stock
+    {
+        public string StockName { get; set; }
+        public string StockSymbol { get; set; }
+        public double PreviousClosingPrice { get; set; }
+        public double CurrentClosingPrice { get; set; }
+        public Stock(string name, string symbol, double previousPrice, double currentPrice)
+        {
+            StockName = name;
+            StockSymbol = symbol;
+            PreviousClosingPrice = previousPrice;
+            CurrentClosingPrice = currentPrice;
+        }
+
+       
+        public double GetChangePercentage()
+        {
+            return ((CurrentClosingPrice - PreviousClosingPrice) / PreviousClosingPrice) * 100;
+        }
+    }
+
+   
+    public static class RandomHelper
+    {
+        private static Random rnd = new Random();
+
+        public static int RandInt(int min, int max)
+        {
+            return rnd.Next(min, max + 1);
+        }
+        public static double RandDouble(double min, double max)
+        {
+            return rnd.NextDouble() * (max - min) + min;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Employee emp = new Employee("John Doe", 50000m);
+            emp.CalculateNetPay();
+            emp.Display();
+            Stock stock = new Stock("Apple Inc.", "AAPL", 150.0, 155.5);
+            Console.WriteLine($"Stock: {stock.StockName} ({stock.StockSymbol})");
+            Console.WriteLine($"Previous Closing Price: {stock.PreviousClosingPrice}");
+            Console.WriteLine($"Current Closing Price: {stock.CurrentClosingPrice}");
+            Console.WriteLine($"Change Percentage: {stock.GetChangePercentage():F2}%\n");
+            Console.WriteLine($"Random Integer between 1 and 10: {RandomHelper.RandInt(1, 10)}");
+            Console.WriteLine($"Random Double between 1 and 10: {RandomHelper.RandDouble(1, 10):F2}");
+        }
+    }
+}
