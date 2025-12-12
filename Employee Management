@@ -1,0 +1,173 @@
+using System;
+
+namespace EmployeeManagement
+{
+    
+    public class Person
+    {
+      
+        private string FirstName;
+        private string LastName;
+        private string EmailAddress;
+        private DateTime DateOfBirth;
+
+      
+        public Person(string firstName, string lastName, string email, DateTime dob)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            EmailAddress = email;
+            DateOfBirth = dob;
+        }
+
+        
+        public bool IsAdult
+        {
+            get
+            {
+                int age = DateTime.Today.Year - DateOfBirth.Year;
+                if (DateOfBirth.Date > DateTime.Today.AddYears(-age)) age--;
+                return age >= 18;
+            }
+        }
+
+        public string SunSign
+        {
+            get
+            {
+                int day = DateOfBirth.Day;
+                int month = DateOfBirth.Month;
+                return GetWesternSunSign(day, month);
+            }
+        }
+
+        public bool IsBirthDay
+        {
+            get
+            {
+                return (DateOfBirth.Day == DateTime.Today.Day && DateOfBirth.Month == DateTime.Today.Month);
+            }
+        }
+
+        public string ScreenName
+        {
+            get
+            {
+                string first = FirstName.ToLower();
+                string last = LastName.ToLower();
+                string monthDay = DateOfBirth.ToString("MMdd");
+                string year = DateOfBirth.ToString("yy");
+                // Example: haridoe052580
+                return first.Substring(0, Math.Min(3, first.Length)) + last.Substring(0, Math.Min(3, last.Length)) + monthDay + year;
+            }
+        }
+
+        // Helper method to get SunSign
+        private string GetWesternSunSign(int day, int month)
+        {
+            switch (month)
+            {
+                case 1: return (day <= 19) ? "Capricorn" : "Aquarius";
+                case 2: return (day <= 18) ? "Aquarius" : "Pisces";
+                case 3: return (day <= 20) ? "Pisces" : "Aries";
+                case 4: return (day <= 19) ? "Aries" : "Taurus";
+                case 5: return (day <= 20) ? "Taurus" : "Gemini";
+                case 6: return (day <= 20) ? "Gemini" : "Cancer";
+                case 7: return (day <= 22) ? "Cancer" : "Leo";
+                case 8: return (day <= 22) ? "Leo" : "Virgo";
+                case 9: return (day <= 22) ? "Virgo" : "Libra";
+                case 10: return (day <= 22) ? "Libra" : "Scorpio";
+                case 11: return (day <= 21) ? "Scorpio" : "Sagittarius";
+                case 12: return (day <= 21) ? "Sagittarius" : "Capricorn";
+                default: return "";
+            }
+        }
+    }
+
+    
+    public class Employee : Person
+    {
+        public double Salary { get; set; }
+
+        public Employee(string firstName, string lastName, string email, DateTime dob, double salary)
+            : base(firstName, lastName, email, dob)
+        {
+            Salary = salary;
+        }
+    }
+  
+    public class HourlyEmployee : Employee
+    {
+        public double HoursWorked { get; set; }
+        public double PayPerHour { get; set; }
+
+        public HourlyEmployee(string firstName, string lastName, string email, DateTime dob,
+                              double hoursWorked, double payPerHour)
+            : base(firstName, lastName, email, dob, hoursWorked * payPerHour)
+        {
+            HoursWorked = hoursWorked;
+            PayPerHour = payPerHour;
+        }
+
+        public double TotalPay => HoursWorked * PayPerHour;
+    }
+
+  
+    public class PermanentEmployee : Employee
+    {
+        public double HRA { get; set; }
+        public double DA { get; set; }
+        public double Tax { get; set; }
+        public double NetPay { get; private set; }
+        public double TotalPay { get; private set; }
+
+        public PermanentEmployee(string firstName, string lastName, string email, DateTime dob,
+                                 double salary, double hra, double da, double tax)
+            : base(firstName, lastName, email, dob, salary)
+        {
+            HRA = hra;
+            DA = da;
+            Tax = tax;
+            CalculatePay();
+        }
+
+        private void CalculatePay()
+        {
+            TotalPay = Salary + HRA + DA;
+            NetPay = TotalPay - Tax;
+        }
+    }
+
+    
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            
+            Employee emp = new Employee("Hari", "Joe", "harijoe@example.com", new DateTime(1980, 5, 25), 50000);
+            Console.WriteLine($"ScreenName: {emp.ScreenName}");
+            Console.WriteLine($"IsAdult: {emp.IsAdult}");
+            Console.WriteLine($"SunSign: {emp.SunSign}");
+            Console.WriteLine($"IsBirthDay: {emp.IsBirthDay}");
+            Console.WriteLine($"Salary: {emp.Salary}\n");
+
+          
+            HourlyEmployee hourly = new HourlyEmployee("Maya", "Smith", "maya.smith@example.com", new DateTime(1995, 3, 12), 160, 25);
+            Console.WriteLine($"HourlyEmployee ScreenName: {hourly.ScreenName}");
+            Console.WriteLine($"Hours Worked: {hourly.HoursWorked}");
+            Console.WriteLine($"Pay per Hour: {hourly.PayPerHour}");
+            Console.WriteLine($"Total Pay: {hourly.TotalPay}\n");
+
+          
+            PermanentEmployee perm = new PermanentEmployee("John", "Doe", "johndoe@example.com", new DateTime(1988, 7, 10), 60000, 9000, 6000, 5000);
+            Console.WriteLine($"PermanentEmployee ScreenName: {perm.ScreenName}");
+            Console.WriteLine($"Salary: {perm.Salary}");
+            Console.WriteLine($"HRA: {perm.HRA}");
+            Console.WriteLine($"DA: {perm.DA}");
+            Console.WriteLine($"Tax: {perm.Tax}");
+            Console.WriteLine($"Total Pay: {perm.TotalPay}");
+            Console.WriteLine($"Net Pay: {perm.NetPay}");
+        }
+    }
+}
+
