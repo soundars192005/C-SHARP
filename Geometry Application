@@ -1,0 +1,61 @@
+using System;
+
+namespace GeometryApplication
+{
+   
+    public class GeometryTool
+    {
+      
+        public double Perimeter(double side)
+        {
+            return 4 * side;
+        }
+
+      
+        public double Perimeter(double length, double breadth)
+        {
+            return 2 * (length + breadth);
+        }
+
+   
+        public double Perimeter(double a, double b, double c)
+        {
+            return a + b + c;
+        }
+
+   
+        public double Perimeter(double radius, bool isCircle)
+        {
+            if (isCircle)
+                return 2 * Math.PI * radius;
+            else
+                throw new ArgumentException("Second parameter must be true for circle.");
+        }
+    }
+
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            GeometryTool tool = new GeometryTool();
+
+          
+            double squareSide = 5;
+            Console.WriteLine($"Square Perimeter (side={squareSide}): {tool.Perimeter(squareSide):F2}");
+
+          
+            double length = 8, breadth = 4;
+            Console.WriteLine($"Rectangle Perimeter (length={length}, breadth={breadth}): {tool.Perimeter(length, breadth):F2}");
+
+           
+            double a = 3, b = 4, c = 5;
+            Console.WriteLine($"Triangle Perimeter (a={a}, b={b}, c={c}): {tool.Perimeter(a, b, c):F2}");
+
+        
+            double radius = 7;
+            Console.WriteLine($"Circle Perimeter (radius={radius}): {tool.Perimeter(radius, true):F2}");
+        }
+    }
+}
+
