@@ -1,0 +1,92 @@
+using System;
+using System.Collections;
+
+namespace StudentManagement
+{
+ 
+    public class Student
+    {
+        public string StudentName { get; set; }
+        public int StudentID { get; set; }
+        public double Marks { get; set; }
+
+        public Student(int id, string name, double marks)
+        {
+            StudentID = id;
+            StudentName = name;
+            Marks = marks;
+        }
+    }
+
+ 
+    public class StudentDAL
+    {
+   
+        private ArrayList students = new ArrayList();
+
+     
+        public bool AddStudent(Student s)
+        {
+            if (s == null)
+                return false;
+
+            students.Add(s);
+            return true;
+        }
+
+       
+        public bool DeleteStudent(int id)
+        {
+            foreach (Student s in students)
+            {
+                if (s.StudentID == id)
+                {
+                    students.Remove(s);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+       
+        public double SearchStudent(int id)
+        {
+            foreach (Student s in students)
+            {
+                if (s.StudentID == id)
+                {
+                    return s.Marks;
+                }
+            }
+            return -1;
+        }
+
+       
+        public Student[] GetAllStudents()
+        {
+            Student[] studentArray = new Student[students.Count];
+            students.CopyTo(studentArray);
+            return studentArray;
+        }
+    }
+
+   
+    class Program
+    {
+        static void Main()
+        {
+            StudentDAL dal = new StudentDAL();
+
+            dal.AddStudent(new Student(1, "Anton", 85.5));
+            dal.AddStudent(new Student(2, "Vijay", 90));
+
+            Console.WriteLine(dal.SearchStudent(1)); // Output: 85.5
+
+            Student[] allStudents = dal.GetAllStudents();
+            foreach (Student s in allStudents)
+            {
+                Console.WriteLine($"{s.StudentID} {s.StudentName} {s.Marks}");
+            }
+        }
+    }
+}
