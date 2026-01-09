@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+{
+    double CalculatePay();
+}
+public class HourlyEmployee : IPayable
+{
+    public string Name { get; set; }
+    public double HourlyRate { get; set; }
+    public int HoursWorked { get; set; }
+    public HourlyEmployee(string name, double hourlyRate, int hoursWorked)
+    {
+        Name = name;
+        HourlyRate = hourlyRate;
+        HoursWorked = hoursWorked;
+    }
+    public double CalculatePay()
+    {
+        return HourlyRate * HoursWorked;
+    }
+}
+public class PermanentEmployee : IPayable
+{
+    public string Name { get; set; }
+    public double MonthlySalary { get; set; 
+    public PermanentEmployee(string name, double monthlySalary)
+    {
+        Name = name;
+        MonthlySalary = monthlySalary;
+    }
+    public double CalculatePay()
+    {
+        return MonthlySalary;
+    }
+}
+class Program
+{
+    static void Main()
+    {
+      List<IPayable> employees = new List<IPayable>();
+        employees.Add(new HourlyEmployee("John", 20.5, 40));
+        employees.Add(new PermanentEmployee("Alice", 3500));
+        foreach (IPayable emp in employees)
+        {
+            Console.WriteLine("Pay: " + emp.CalculatePay());
+        }
+    }
+}
+
